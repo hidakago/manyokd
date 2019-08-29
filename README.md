@@ -1,24 +1,33 @@
-# README
+### README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+**モデル情報**
 
-Things you may want to cover:
+1. User : ユーザー
+  カラム名(key)：データ型("id"カラムは記述を除外) : 説明
+  name : string : ユーザー名
+  email : string : メールアドレス
+  password : string : パスワード
 
-* Ruby version
 
-* System dependencies
+2. Task : タスク
+  カラム名(英語)：データ型("id"カラムは記述を除外)
+  name : string : タスク名
+  description : text : タスクの説明
+  deadline : datetime : タスクの期限日
+  priority : integer : タスクの優先順位
+  status : integer : タスクの状態
+  user_id(FK) : integer : モデルUserのidを参照する外部キー
 
-* Configuration
 
-* Database creation
+3. Label : ラベル
+  カラム名(英語)：データ型("id"カラムは記述を除外)
+  name : string : ラベル名
 
-* Database initialization
 
-* How to run the test suite
+4. Relation : タスクとラベルの関連付けモデル
+  カラム名(英語)：データ型("id"カラムは記述を除外)
+  task_id(FK) : integer : モデルTaskのidを参照する外部キー
+  label_id(FK) : integer : モデルLabelのidを参照する外部キー
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+UserモデルとTaskモデルは1対多の関係
+TaskモデルとLabelモデルは多対多の関係であるため、Relationモデルを介して関連づける。
