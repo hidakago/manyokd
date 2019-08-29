@@ -24,10 +24,10 @@
   name : string : ラベル名  
 
 
-4. Relation : タスクとラベルの関連付けモデル
-  カラム名(英語)：データ型("id"カラムは記述を除外)
-  task_id(FK) : integer : モデルTaskのidを参照する外部キー
-  label_id(FK) : integer : モデルLabelのidを参照する外部キー
+4. Relation : タスクとラベルの関連付けモデル  
+  カラム名(英語)：データ型("id"カラムは記述を除外)  
+  task_id(FK) : integer : モデルTaskのidを参照する外部キー  
+  label_id(FK) : integer : モデルLabelのidを参照する外部キー  
 
-UserモデルとTaskモデルは1対多の関係
-TaskモデルとLabelモデルは多対多の関係であるため、Relationモデルを介して関連づける。
+UserモデルとTaskモデルは1対多の関係  
+TaskモデルとLabelモデルは多対多の関係であるため、Relationモデルを介して関連づける。  
