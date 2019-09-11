@@ -1,0 +1,12 @@
+ja:
+  view:
+    tasks:
+      index: タスク一覧
+      task_name: タスク名
+      task_description: タスク説明
+      link_to_show_task: タスク詳細
+      link_to_edit_task: タスク編集
+      link_to_delete_task: タスク削除
+      message_of_confirm_delete_task: タスクを削除してもよろしいですか？
+      link_to_new_task: 新しいタスクを作成
+      link_to_index_task: タスク一覧へ

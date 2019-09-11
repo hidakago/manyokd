@@ -33,11 +33,11 @@ RSpec.feature "タスク管理機能", type: :feature do
     # 2.ここに「タスク名」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
     # 3.ここに「タスク詳細」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
     fill_in 'タスク名', with: 'テスト用のタスク名です'
-    fill_in '詳細', with: 'Rspecのテストコードを作成すること'
+    fill_in 'タスク説明', with: 'Rspecのテストコードを作成すること'
 
     # 「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
     # 4.「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
-    click_on 'Create Task'
+    click_on '登録する'
 
     # clickで登録されたはずの情報が、タスク詳細ページに表示されているかを確認する
     # （タスクが登録されたらタスク詳細画面に遷移されるという前提）
@@ -56,7 +56,7 @@ RSpec.feature "タスク管理機能", type: :feature do
 
     visit task_path(task.id)
 
-    save_and_open_page
+    # save_and_open_page
 
     expect(page).to have_content 'task_name_06'
     expect(page).to have_content 'test06testtest'
