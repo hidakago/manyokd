@@ -10,3 +10,5 @@ ja:
       message_of_confirm_delete_task: タスクを削除してもよろしいですか？
       link_to_new_task: 新しいタスクを作成
       link_to_index_task: タスク一覧へ
+      order_asc: 作成日時で昇順
+      order_desc: 作成日時で降順
