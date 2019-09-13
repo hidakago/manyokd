@@ -12,4 +12,4 @@ ja:
       link_to_index_task: タスク一覧へ
       order_asc: 作成日時で昇順
       order_desc: 作成日時で降順
-      error_notification_word: 件のエラーがあります。
+      error_notification_word: 件のエラーがあります。入力内容を修正してください。
