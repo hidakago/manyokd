@@ -21,10 +21,14 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    if @task.save
-      redirect_to tasks_path, notice: 'タスクが作成されました。'
-    else
+    if @task.invalid?
       render :new
+    else
+      if @task.save
+        redirect_to tasks_path, notice: 'タスクが作成されました。'
+      else
+        render :new
+      end
     end
   end
 
