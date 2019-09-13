@@ -55,3 +55,14 @@
 
 UserモデルとTaskモデルは1対多の関係  
 TaskモデルとLabelモデルは多対多の関係であるため、Labelingモデルを介して関連づける。  
+
+**デプロイ手順**
+
+1. アセットプリコンパイル実行
+2. git add
+3. git commit
+4. Herokuにログインする
+5. heroku create
+6. git push heroku master
+7. heroku run rails db:migrate
+8. heroku open
