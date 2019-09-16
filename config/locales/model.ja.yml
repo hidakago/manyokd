@@ -8,3 +8,4 @@ ja:
         description: タスク詳細
         created_at: 作成日時
         updated_at: 更新日時
+        deadline: 終了期限
