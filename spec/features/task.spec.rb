@@ -45,6 +45,8 @@ RSpec.feature "タスク管理機能", type: :feature do
     fill_in 'タスク説明', with: 'Rspecのテストコードを作成すること'
     # 「終了期限」内容をセット
     page.execute_script("$('#datepicker').val('2019-10-08')")
+    # 「進捗状況」内容をセット
+    select '完了', from: '進捗状況'
 
     # 「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
     # 4.「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
@@ -58,23 +60,27 @@ RSpec.feature "タスク管理機能", type: :feature do
     expect(page).to have_content 'テスト用のタスク名です'
     expect(page).to have_content 'Rspecのテストコードを作成すること'
     expect(page).to have_content '2019-10-08'
+    expect(page).to have_content '完了'
     expect(page).not_to have_content '本番用のタスク名です'
 
   end
 
   scenario "タスク詳細のテスト" do
     # 「任意のタスク詳細画面に遷移したら、該当タスクの内容が表示されたページに遷移する」ことをテストで証明しましょう。
-    task = Task.create!(name: 'task_name_06', description: 'test06testtest', deadline: '2019-10-02')
+    task = Task.create!(name: 'task_name_06', description: 'test06testtest', deadline: '2019-10-02', status: "着手中")
 
     visit task_path(task.id)
 
+save_and_open_page
     expect(page).to have_content 'task_name_06'
     expect(page).to have_content 'test06testtest'
     expect(page).to have_content '2019-10-02'
+    expect(page).to have_content '着手中'
 
     expect(page).not_to have_content 'task_name_07'
     expect(page).not_to have_content 'test07testtest'
     expect(page).not_to have_content '2019-10-03'
+    expect(page).not_to have_content '完了'
   end
 
   scenario "タスクが作成日時の降順に並んでいるかのテスト" do
