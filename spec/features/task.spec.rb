@@ -4,13 +4,13 @@ require 'rails_helper'
 # このRSpec.featureの右側に、「タスク管理機能」のように、テスト項目の名称を書きます（do ~ endでグループ化されています）
 RSpec.feature "タスク管理機能", type: :feature do
   background do
-    FactoryBot.create(:first_order_task)
-    FactoryBot.create(:task, name: 'task_name_01', description: 'test01testtest')
-    FactoryBot.create(:task, name: 'task_name_02', description: 'sample02sample')
-    FactoryBot.create(:task, name: 'task_name_08', description: 'test08testtest')
-    FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample')
-    FactoryBot.create(:second_task)
-    FactoryBot.create(:last_order_task)
+    FactoryBot.create(:first_order_task, deadline: '2019-10-02')
+    FactoryBot.create(:task, name: 'task_name_01', description: 'test01testtest', deadline: '2019-10-05')
+    FactoryBot.create(:task, name: 'task_name_02', description: 'sample02sample', deadline: '2019-10-01')
+    FactoryBot.create(:task, name: 'task_name_08', description: 'test08testtest', deadline: '2019-10-07')
+    FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02')
+    FactoryBot.create(:second_task, deadline: '2019-10-02')
+    FactoryBot.create(:last_order_task, deadline: '2019-10-06')
   end
   # scenario（itのalias）の中に、確認したい各項目のテストの処理を書きます。
   scenario "タスク一覧のテスト" do
@@ -32,7 +32,7 @@ RSpec.feature "タスク管理機能", type: :feature do
 
   end
 
-  scenario "タスク作成のテスト" do
+  scenario "タスク作成のテスト", js: true do
     # new_task_pathにvisitする（タスク登録ページに遷移する）
     # 1.ここにnew_task_pathにvisitする処理を書く
     visit new_task_path
@@ -43,6 +43,8 @@ RSpec.feature "タスク管理機能", type: :feature do
     # 3.ここに「タスク詳細」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
     fill_in 'タスク名', with: 'テスト用のタスク名です'
     fill_in 'タスク説明', with: 'Rspecのテストコードを作成すること'
+    # 「終了期限」内容をセット
+    page.execute_script("$('#datepicker').val('2019-10-08')")
 
     # 「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
     # 4.「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
@@ -55,21 +57,24 @@ RSpec.feature "タスク管理機能", type: :feature do
 
     expect(page).to have_content 'テスト用のタスク名です'
     expect(page).to have_content 'Rspecのテストコードを作成すること'
+    expect(page).to have_content '2019-10-08'
     expect(page).not_to have_content '本番用のタスク名です'
 
   end
 
   scenario "タスク詳細のテスト" do
     # 「任意のタスク詳細画面に遷移したら、該当タスクの内容が表示されたページに遷移する」ことをテストで証明しましょう。
-    task = Task.create!(name: 'task_name_06', description: 'test06testtest')
+    task = Task.create!(name: 'task_name_06', description: 'test06testtest', deadline: '2019-10-02')
 
     visit task_path(task.id)
 
     expect(page).to have_content 'task_name_06'
     expect(page).to have_content 'test06testtest'
+    expect(page).to have_content '2019-10-02'
 
     expect(page).not_to have_content 'task_name_07'
     expect(page).not_to have_content 'test07testtest'
+    expect(page).not_to have_content '2019-10-03'
   end
 
   scenario "タスクが作成日時の降順に並んでいるかのテスト" do
@@ -121,4 +126,54 @@ RSpec.feature "タスク管理機能", type: :feature do
 
      # save_and_open_page
    end
+
+   scenario "タスクが終了期限の降順に並んでいるかのテスト" do
+
+     # tasks_pathにvisitする（タスク一覧ページに遷移する）
+     visit tasks_path
+
+     # この時点でのタスクのリストを取得。
+     # この時点では作成日時が一番古いタスクが一番先頭になっているはず
+     task = all('.task_list')
+
+     # リストの一番先頭の行を取得
+     task_0 = task[0]
+
+     # リストの一番先頭の行が、作成日時が一番古いタスクであることを証明
+     expect(task_0).to have_content "最初に作成したタスク名first_order_task_name"
+     # リストの一番先頭の行が、作成日時が一番新しいタスクでないことを証明
+     expect(task_0).not_to have_content "最後に作成したタスク名last_order_task_name"
+
+     # "終了期限で降順"リンクをクリックする
+     click_link 'order_change_deadline'
+
+     # この時点でのタスクのリストを取得。
+     # この時点では終了期限が一番新しいタスクが一番先頭になっているはず
+     task = all('.task_list')
+
+     # リストの一番先頭の行を取得
+     task_0 = task[0]
+
+     # リストの一番先頭の行が、終了期限が一番新しいタスクであることを証明
+     expect(task_0).to have_content "2019-10-07"
+     # リストの一番先頭の行が、終了期限が一番古いタスクでないことを証明
+     expect(task_0).not_to have_content "2019-10-01"
+
+     # "作成日時で降順"リンクをクリックする
+     click_link 'order_change'
+
+     # この時点でのタスクのリストを取得。
+     # この時点では作成日時が一番古いタスクが一番先頭になっているはず
+     task = all('.task_list')
+
+     # リストの一番先頭の行を取得
+     task_0 = task[0]
+
+     # リストの一番先頭の行が、作成日時が一番新しいタスクであることを証明
+     expect(task_0).to have_content "最後に作成したタスク名last_order_task_name"
+     # リストの一番先頭の行が、作成日時が一番古いタスクでないことを証明
+     expect(task_0).not_to have_content "最初に作成したタスク名first_order_task_name"
+
+      # save_and_open_page
+    end
 end
