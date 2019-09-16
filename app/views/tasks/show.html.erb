@@ -1,14 +1,15 @@
 <p id="notice"><%= notice %></p>
-
 <p>
   <strong><%= t('view.tasks.task_name') %></strong>
   <%= @task.name %>
 </p>
-
 <p>
   <strong><%= t('view.tasks.task_description') %></strong>
   <%= @task.description %>
 </p>
-
+<p>
+  <strong><%= t('view.tasks.task_deadline') %></strong>
+  <%= @task.deadline %>
+</p>
 <%= link_to t('view.tasks.link_to_edit_task'), edit_task_path(@task) %> |
 <%= link_to t('view.tasks.link_to_index_task'), tasks_path %>
