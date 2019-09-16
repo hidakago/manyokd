@@ -14,3 +14,4 @@ ja:
       order_asc: 作成日時で昇順
       order_desc: 作成日時で降順
       error_notification_word: 件のエラーがあります。
+      sort_deadline_desc: 終了期限でソートする
