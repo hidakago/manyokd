@@ -4,13 +4,13 @@ require 'rails_helper'
 # このRSpec.featureの右側に、「タスク管理機能」のように、テスト項目の名称を書きます（do ~ endでグループ化されています）
 RSpec.feature "タスク管理機能", type: :feature do
   background do
-    FactoryBot.create(:first_order_task, deadline: '2019-10-02')
-    FactoryBot.create(:task, name: 'task_name_01', description: 'test01testtest', deadline: '2019-10-05')
-    FactoryBot.create(:task, name: 'task_name_02', description: 'sample02sample', deadline: '2019-10-01')
-    FactoryBot.create(:task, name: 'task_name_08', description: 'test08testtest', deadline: '2019-10-07')
-    FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02')
-    FactoryBot.create(:second_task, deadline: '2019-10-02')
-    FactoryBot.create(:last_order_task, deadline: '2019-10-06')
+    FactoryBot.create(:first_order_task, deadline: '2019-10-02', status: "完了")
+    FactoryBot.create(:task, name: 'task_name_01', description: 'test01testtest', deadline: '2019-10-05', status: "完了")
+    FactoryBot.create(:task, name: 'task_name_02', description: 'sample02sample', deadline: '2019-10-01', status: "未着手")
+    FactoryBot.create(:task, name: 'task_name_08', description: 'test08testtest', deadline: '2019-10-07', status: "未着手")
+    FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02', status: "着手中")
+    FactoryBot.create(:second_task, deadline: '2019-10-02', status: "未着手")
+    FactoryBot.create(:last_order_task, deadline: '2019-10-06', status: "着手中")
   end
   # scenario（itのalias）の中に、確認したい各項目のテストの処理を書きます。
   scenario "タスク一覧のテスト" do
@@ -71,7 +71,6 @@ RSpec.feature "タスク管理機能", type: :feature do
 
     visit task_path(task.id)
 
-save_and_open_page
     expect(page).to have_content 'task_name_06'
     expect(page).to have_content 'test06testtest'
     expect(page).to have_content '2019-10-02'
@@ -131,55 +130,116 @@ save_and_open_page
     expect(task_0).not_to have_content "最後に作成したタスク名last_order_task_name"
 
      # save_and_open_page
-   end
+  end
 
-   scenario "タスクが終了期限の降順に並んでいるかのテスト" do
+  scenario "タスクが終了期限の降順に並んでいるかのテスト" do
 
-     # tasks_pathにvisitする（タスク一覧ページに遷移する）
-     visit tasks_path
+    # tasks_pathにvisitする（タスク一覧ページに遷移する）
+    visit tasks_path
 
-     # この時点でのタスクのリストを取得。
-     # この時点では作成日時が一番古いタスクが一番先頭になっているはず
-     task = all('.task_list')
+    # この時点でのタスクのリストを取得。
+    # この時点では作成日時が一番古いタスクが一番先頭になっているはず
+    task = all('.task_list')
 
-     # リストの一番先頭の行を取得
-     task_0 = task[0]
+    # リストの一番先頭の行を取得
+    task_0 = task[0]
 
-     # リストの一番先頭の行が、作成日時が一番古いタスクであることを証明
-     expect(task_0).to have_content "最初に作成したタスク名first_order_task_name"
-     # リストの一番先頭の行が、作成日時が一番新しいタスクでないことを証明
-     expect(task_0).not_to have_content "最後に作成したタスク名last_order_task_name"
+    # リストの一番先頭の行が、作成日時が一番古いタスクであることを証明
+    expect(task_0).to have_content "最初に作成したタスク名first_order_task_name"
+    # リストの一番先頭の行が、作成日時が一番新しいタスクでないことを証明
+    expect(task_0).not_to have_content "最後に作成したタスク名last_order_task_name"
 
-     # "終了期限で降順"リンクをクリックする
-     click_link 'order_change_deadline'
+    # "終了期限で降順"リンクをクリックする
+    click_link 'order_change_deadline'
 
-     # この時点でのタスクのリストを取得。
-     # この時点では終了期限が一番新しいタスクが一番先頭になっているはず
-     task = all('.task_list')
+    # この時点でのタスクのリストを取得。
+    # この時点では終了期限が一番新しいタスクが一番先頭になっているはず
+    task = all('.task_list')
 
-     # リストの一番先頭の行を取得
-     task_0 = task[0]
+    # リストの一番先頭の行を取得
+    task_0 = task[0]
 
-     # リストの一番先頭の行が、終了期限が一番新しいタスクであることを証明
-     expect(task_0).to have_content "2019-10-07"
-     # リストの一番先頭の行が、終了期限が一番古いタスクでないことを証明
-     expect(task_0).not_to have_content "2019-10-01"
+    # リストの一番先頭の行が、終了期限が一番新しいタスクであることを証明
+    expect(task_0).to have_content "2019-10-07"
+    # リストの一番先頭の行が、終了期限が一番古いタスクでないことを証明
+    expect(task_0).not_to have_content "2019-10-01"
 
-     # "作成日時で降順"リンクをクリックする
-     click_link 'order_change'
+    # "作成日時で降順"リンクをクリックする
+    click_link 'order_change'
 
-     # この時点でのタスクのリストを取得。
-     # この時点では作成日時が一番古いタスクが一番先頭になっているはず
-     task = all('.task_list')
+    # この時点でのタスクのリストを取得。
+    # この時点では作成日時が一番古いタスクが一番先頭になっているはず
+    task = all('.task_list')
 
-     # リストの一番先頭の行を取得
-     task_0 = task[0]
+    # リストの一番先頭の行を取得
+    task_0 = task[0]
 
-     # リストの一番先頭の行が、作成日時が一番新しいタスクであることを証明
-     expect(task_0).to have_content "最後に作成したタスク名last_order_task_name"
-     # リストの一番先頭の行が、作成日時が一番古いタスクでないことを証明
-     expect(task_0).not_to have_content "最初に作成したタスク名first_order_task_name"
+    # リストの一番先頭の行が、作成日時が一番新しいタスクであることを証明
+    expect(task_0).to have_content "最後に作成したタスク名last_order_task_name"
+    # リストの一番先頭の行が、作成日時が一番古いタスクでないことを証明
+    expect(task_0).not_to have_content "最初に作成したタスク名first_order_task_name"
 
-      # save_and_open_page
-    end
+    # save_and_open_page
+  end
+
+  scenario "タスクをタスク名＋進捗状況を指定して検索できるかのテスト" do
+
+    visit tasks_path
+
+    task = all('.task_list')
+
+    task_0 = task[0]
+
+    # リストの一番先頭の行が、作成日時が一番古いタスクであることを証明
+    expect(task_0).to have_content "最初に作成したタスク名first_order_task_name"
+    # リストの一番先頭の行が、作成日時が一番新しいタスクでないことを証明
+    expect(task_0).not_to have_content "最後に作成したタスク名last_order_task_name"
+
+    # 検索用のタスク名に文字を指定
+    fill_in 'search_task_name', with: 'task_name'
+
+    # 検索用の進捗状況を指定
+    select '未着手', from: '進捗状況'
+
+    click_on 'search_task'
+
+    tasks = all('.task_list')
+
+    task_count = tasks.count
+    expect(task_count).to eq 2
+
+    expect(tasks[0]).to have_content "sample02sample"
+    expect(tasks[1]).to have_content "test08testtest"
+  end
+
+  scenario "タスクを進捗状況を指定して検索できるかのテスト" do
+
+    visit tasks_path
+
+    task = all('.task_list')
+
+    task_0 = task[0]
+
+    # リストの一番先頭の行が、作成日時が一番古いタスクであることを証明
+    expect(task_0).to have_content "最初に作成したタスク名first_order_task_name"
+    # リストの一番先頭の行が、作成日時が一番新しいタスクでないことを証明
+    expect(task_0).not_to have_content "最後に作成したタスク名last_order_task_name"
+
+    # 検索用のタスク名に文字を指定しない
+    fill_in 'search_task_name', with: ''
+
+    # 検索用の進捗状況を指定
+    select '完了', from: '進捗状況'
+
+    click_on 'search_task'
+
+    tasks = all('.task_list')
+
+    task_count = tasks.count
+    expect(task_count).to eq 2
+
+    expect(tasks[0]).to have_content "最初に作成したタスク詳細first_order_task_description"
+    expect(tasks[1]).to have_content "test01testtest"
+    # save_and_open_page
+  end
 end
