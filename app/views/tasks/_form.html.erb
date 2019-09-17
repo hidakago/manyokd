@@ -21,6 +21,10 @@
     <%= form.label :deadline, t('view.tasks.task_deadline') %>
     <%= form.text_field :deadline, id: "datepicker", readonly: "readonly" %>
   </div>
+  <div class="field">
+    <%= form.label :status, t('view.tasks.task_status') %>
+    <%= form.select :status, [t('view.tasks.task_status_not_yet_started'),t('view.tasks.task_status_started'),t('view.tasks.task_status_complete')] %>
+  </div>
   <div class="actions">
     <%= form.submit %>
   </div>

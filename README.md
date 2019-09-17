@@ -4,6 +4,7 @@
 ※各モデルの"id"カラムに関しては記述を除外
 
 1. User  
+
 |モデル名 |日本語名|  
 |--------|-------|  
 |User    |ユーザー|  
@@ -16,6 +17,7 @@
 |password|   |string|パスワード   |  
 
 2. Task  
+
 |モデル名 |日本語名|  
 |--------|-------|  
 |Task    |タスク  |  
@@ -26,12 +28,13 @@
 |name       |   |string  |タスク名       |  
 |description|   |text    |タスクの説明    |  
 |deadline   |   |string  |タスクの期限日  |  
+|status     |   |string  |タスクの状態   |  
 |priority   |   |integer |タスクの優先順位|  
-|status     |   |integer |タスクの状態   |  
 |user_id    |FK |integer |モデルUserのidを参照する外部キー|  
 
 
-3. Label
+3. Label  
+
 |モデル名 |日本語名|  
 |--------|-------|  
 |Label   |ラベル  |  
@@ -43,6 +46,7 @@
 
 
 4. Labeling  
+
 |モデル名 |日本語名|  
 |--------|-------|  
 |Labeling|タスクとラベルの関連付けモデル  |  

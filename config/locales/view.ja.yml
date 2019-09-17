@@ -5,6 +5,10 @@ ja:
       task_name: タスク名
       task_description: タスク説明
       task_deadline: 終了期限
+      task_status: 進捗状況
+      task_status_not_yet_started: 未着手
+      task_status_started: 着手中
+      task_status_complete: 完了
       link_to_show_task: タスク詳細
       link_to_edit_task: タスク編集
       link_to_delete_task: タスク削除
@@ -15,3 +19,5 @@ ja:
       order_desc: 作成日時で降順
       error_notification_word: 件のエラーがあります。
       sort_deadline_desc: 終了期限でソートする
+      conditional_search: 絞り込み検索
+      search_execution: 検索実行
