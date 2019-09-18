@@ -6,6 +6,7 @@ ja:
       task_description: タスク説明
       task_deadline: 終了期限
       task_status: 進捗状況
+      task_priority: 優先順位
       task_status_not_yet_started: 未着手
       task_status_started: 着手中
       task_status_complete: 完了

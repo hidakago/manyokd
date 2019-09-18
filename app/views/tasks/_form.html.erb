@@ -25,6 +25,10 @@
     <%= form.label :status, t('view.tasks.task_status') %>
     <%= form.select :status, [t('view.tasks.task_status_not_yet_started'),t('view.tasks.task_status_started'),t('view.tasks.task_status_complete')] %>
   </div>
+  <div class="field">
+    <%= form.label :priority, t('view.tasks.task_priority') %>
+    <%= form.select :priority, Task.priorities.keys.to_a, {} %>
+  </div>
   <div class="actions">
     <%= form.submit %>
   </div>
