@@ -263,4 +263,36 @@ RSpec.feature "タスク管理機能", type: :feature do
     expect(tasks[1]).to have_content "test01testtest"
     # save_and_open_page
   end
+
+  scenario "優先順位で高い順にソートして表示できるかのテスト" do
+    visit tasks_path
+
+    task = all('.task_list')
+
+    task_0 = task[0]
+
+    expect(task_0).to have_content "低"
+
+    expect(task_0).not_to have_content "高"
+
+    click_link 'order_change_priority'
+
+    task = all('.task_list')
+
+    task_0 = task[0]
+
+    expect(task_0).to have_content "高"
+
+    expect(task_0).not_to have_content "低"
+
+    click_link 'order_change_priority'
+
+    task = all('.task_list')
+
+    task_0 = task[0]
+
+    expect(task_0).to have_content "高"
+
+    expect(task_0).not_to have_content "低"
+  end
 end

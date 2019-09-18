@@ -22,3 +22,4 @@ ja:
       sort_deadline_desc: 終了期限でソートする
       conditional_search: 絞り込み検索
       search_execution: 検索実行
+      sort_priority_desc: 優先順位の高い順にソートする

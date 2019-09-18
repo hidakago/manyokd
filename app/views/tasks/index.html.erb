@@ -39,6 +39,7 @@
       <%= link_to order_text, tasks_path(order: @order), id: "order_change" %>
     </td>
     <td><%= link_to t('view.tasks.sort_deadline_desc'), tasks_path(sort_expired: "true"), id: "order_change_deadline" %></td>
+    <td><%= link_to t('view.tasks.sort_priority_desc'), tasks_path(sort_priority: "true"), id: "order_change_priority" %></td>
   </tr>
 </table>
 </div>
