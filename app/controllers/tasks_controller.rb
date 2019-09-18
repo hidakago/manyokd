@@ -1,25 +1,27 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   def index
+    paginates_per = 4
     if params[:task].present? && params[:task][:search] == "true"
       # @tasks = Task.where("name LIKE ? AND status = ?", "%#{ params[:task][:name] }%", params[:task][:status])
-      @tasks = Task.search(params[:task][:name], params[:task][:status])
+      @tasks = Task.search(params[:task][:name], params[:task][:status]).page(params[:page]).per(paginates_per)
     else
       if params[:sort_priority]
         @order = "asc"
         @order = params[:order] if params[:order]
-        @tasks = Task.all.order(priority: "desc", created_at: @order)
+        @tasks = Task.all.order(priority: "desc", created_at: @order).page(params[:page]).per(paginates_per)
       elsif params[:sort_expired]
         @order = "asc"
         @order = params[:order] if params[:order]
-        @tasks = Task.all.order(deadline: "desc", created_at: @order)
+        @tasks = Task.all.order(deadline: "desc", created_at: @order).page(params[:page]).per(paginates_per)
       else
         if params[:order] == "asc"
           @order = "desc"
         else
           @order = "asc"
         end
-        @tasks = Task.all.order(created_at: @order)
+        # @tasks = Task.all.order(created_at: @order)
+        @tasks = Task.page(params[:page]).per(paginates_per).order(created_at: @order)
       end
     end
   end

@@ -34,7 +34,7 @@ RSpec.feature "タスク管理機能", type: :feature do
     expect(page).to have_content '低'
 
     expect(task[0]).to have_content '低'
-    expect(task[task_count - 1]).to have_content '高'
+    expect(task[task_count - 1]).to have_content '中'
 
     # visitした（到着した）expect(page)に（タスク一覧ページに）「testtesttest」「samplesample」という文字列が
     # have_contentされていない（含まれていない）ということをexpectする（確認・期待する）テストを書いている
@@ -75,12 +75,11 @@ RSpec.feature "タスク管理機能", type: :feature do
     # 5.タスク詳細ページに、テストコードで作成したはずのデータ（記述）がhave_contentされているか（含まれているか）を確認（期待）するコードを書く
     visit tasks_path
 
-    expect(page).to have_content 'テスト用のタスク名です'
-    expect(page).to have_content 'Rspecのテストコードを作成すること'
-    expect(page).to have_content '2019-10-08'
-    expect(page).to have_content '完了'
-    expect(page).to have_content '高'
-    expect(page).not_to have_content '本番用のタスク名です'
+    expect(page).not_to have_content 'テスト用のタスク名です'
+    expect(page).not_to have_content 'Rspecのテストコードを作成すること'
+    expect(page).not_to have_content '2019-10-08'
+    expect(page).to have_content 'task_name_08'
+    expect(page).to have_content 'test08testtest'
 
   end
 
@@ -130,9 +129,7 @@ RSpec.feature "タスク管理機能", type: :feature do
     # リストの一番先頭の行を取得
     task_0 = task[0]
 
-    # リストの一番先頭の行が、作成日時が一番新しいタスクであることを証明
     expect(task_0).to have_content "最後に作成したタスク名last_order_task_name"
-    # リストの一番先頭の行が、作成日時が一番古いタスクでないことを証明
     expect(task_0).not_to have_content "最初に作成したタスク名first_order_task_name"
 
     # "作成日時で昇順"リンクをクリックする
@@ -149,7 +146,6 @@ RSpec.feature "タスク管理機能", type: :feature do
     expect(task_0).to have_content "最初に作成したタスク名first_order_task_name"
     # リストの一番先頭の行が、作成日時が一番新しいタスクでないことを証明
     expect(task_0).not_to have_content "最後に作成したタスク名last_order_task_name"
-
      # save_and_open_page
   end
 
