@@ -1,49 +1,52 @@
-<p id="notice"><%= notice %></p>
-
-<h1><%= t('view.tasks.index') %></h1>
-
 <div>
-  <%= form_with(model: Task.new, local: true, method: :get, url: tasks_path) do |form| %>
+  <p id="notice"><%= notice %></p>
+</div>
+<div>
+  <h1 class="bg-primary"><%= t('view.tasks.index') %></h1>
+</div>
+<br>
+<div>
   <table>
     <tr>
-      <td>
-        <h3><%= t('view.tasks.conditional_search') %></h3>
+      <td class="td_link_to_new_task"><%= link_to t('view.tasks.link_to_new_task'), new_task_path %></td>
+      <td class="td_link_to_order_change">
+        <% if @order == "asc" %>
+        <%   order_text = t('view.tasks.order_desc') %>
+        <% else  %>
+        <%   order_text = t('view.tasks.order_asc') %>
+        <% end %>
+        <%= link_to order_text, tasks_path(order: @order), id: "order_change" %>
       </td>
-      <td>
-        <%= form.label :name, t('view.tasks.task_name') %>
-        <%= form.text_field :name, id: "search_task_name" %>
+      <td class="td_link_to_order_change_deadline">
+        <%= link_to t('view.tasks.sort_deadline_desc'), tasks_path(sort_expired: "true"), id: "order_change_deadline" %></td>
+      <td class="td_link_to_order_change_priority">
+        <%= link_to t('view.tasks.sort_priority_desc'), tasks_path(sort_priority: "true"), id: "order_change_priority" %>
       </td>
-      <td>
-        <%= form.label :status, t('view.tasks.task_status') %>
-        <%= form.select :status,   [t('view.tasks.task_status_not_yet_started'),t('view.tasks.task_status_started'),t('view.tasks.task_status_complete')], id: "search_task_status" %>
-      </td>
-      <td>
-        <%= form.hidden_field :search, value: 'true' %>
-        <%= form.submit t('view.tasks.search_execution'), id: "search_task" %>
-      </td>
+      <%= form_with(model: Task.new, local: true, method: :get, url: tasks_path) do |form| %>
+        <td class="td_conditional_search_title">
+          <%= t('view.tasks.conditional_search') %>
+        </td>
+        <td class="td_task_name_title">
+          <%= form.label :name, t('view.tasks.task_name') %>
+        </td>
+        <td class="td_task_name_area">
+          <%= form.text_field :name, id: "search_task_name" %>
+        </td>
+        <td class="td_task_status_title">
+          <%= form.label :status, t('view.tasks.task_status') %>
+        </td>
+        <td class="td_task_status_area">
+          <%= form.select :status,   [t('view.tasks.task_status_not_yet_started'),t('view.tasks.task_status_started'),t('view.tasks.task_status_complete')], id: "search_task_status" %>
+        </td>
+        <td>
+          <%= form.hidden_field :search, value: 'true' %>
+          <%= form.submit t('view.tasks.search_execution'), id: "search_task" %>
+        </td>
+      <% end %>
     </tr>
   </table>
-  <% end %>
 </div>
-<div>
-<table>
-  <tr>
-    <td><%= link_to t('view.tasks.link_to_new_task'), new_task_path %></td>
-    <td colspan="3"></td>
-    <td>
-      <% if @order == "asc" %>
-      <%   order_text = t('view.tasks.order_desc') %>
-      <% else  %>
-      <%   order_text = t('view.tasks.order_asc') %>
-      <% end %>
-      <%= link_to order_text, tasks_path(order: @order), id: "order_change" %>
-    </td>
-    <td><%= link_to t('view.tasks.sort_deadline_desc'), tasks_path(sort_expired: "true"), id: "order_change_deadline" %></td>
-    <td><%= link_to t('view.tasks.sort_priority_desc'), tasks_path(sort_priority: "true"), id: "order_change_priority" %></td>
-  </tr>
-</table>
-</div>
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th><%= t('view.tasks.task_name') %></th>
