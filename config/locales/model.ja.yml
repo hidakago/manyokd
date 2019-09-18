@@ -10,3 +10,9 @@ ja:
         updated_at: 更新日時
         deadline: 終了期限
         status: 進捗状況
+  enums:
+    task:
+      priority:
+        priority_low: 低
+        priority_medium: 中
+        priority_high: 高

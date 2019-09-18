@@ -25,6 +25,11 @@
     <%= form.label :status, t('view.tasks.task_status') %>
     <%= form.select :status, [t('view.tasks.task_status_not_yet_started'),t('view.tasks.task_status_started'),t('view.tasks.task_status_complete')] %>
   </div>
+  <div class="field">
+    <%= form.label :priority, t('view.tasks.task_priority') %>
+    <%#= form.select :priority, Task.priorities_i18n.keys.to_a, {} %>
+    <%= form.select :priority, Task.priorities.map { |k, v| [t("enums.task.priority.#{k}"), k] } %>
+  </div>
   <div class="actions">
     <%= form.submit %>
   </div>

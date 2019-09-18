@@ -4,13 +4,13 @@ require 'rails_helper'
 # このRSpec.featureの右側に、「タスク管理機能」のように、テスト項目の名称を書きます（do ~ endでグループ化されています）
 RSpec.feature "タスク管理機能", type: :feature do
   background do
-    FactoryBot.create(:first_order_task, deadline: '2019-10-02', status: "完了")
-    FactoryBot.create(:task, name: 'task_name_01', description: 'test01testtest', deadline: '2019-10-05', status: "完了")
-    FactoryBot.create(:task, name: 'task_name_02', description: 'sample02sample', deadline: '2019-10-01', status: "未着手")
-    FactoryBot.create(:task, name: 'task_name_08', description: 'test08testtest', deadline: '2019-10-07', status: "未着手")
-    FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02', status: "着手中")
-    FactoryBot.create(:second_task, deadline: '2019-10-02', status: "未着手")
-    FactoryBot.create(:last_order_task, deadline: '2019-10-06', status: "着手中")
+    FactoryBot.create(:first_order_task, deadline: '2019-10-02', status: "完了", priority: 0)
+    FactoryBot.create(:task, name: 'task_name_01', description: 'test01testtest', deadline: '2019-10-05', status: "完了", priority: 1)
+    FactoryBot.create(:task, name: 'task_name_02', description: 'sample02sample', deadline: '2019-10-01', status: "未着手", priority: 2)
+    FactoryBot.create(:task, name: 'task_name_08', description: 'test08testtest', deadline: '2019-10-07', status: "未着手", priority: 1)
+    FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02', status: "着手中", priority: 0)
+    FactoryBot.create(:second_task, deadline: '2019-10-02', status: "未着手", priority: 1)
+    FactoryBot.create(:last_order_task, deadline: '2019-10-06', status: "着手中", priority: 2)
   end
   # scenario（itのalias）の中に、確認したい各項目のテストの処理を書きます。
   scenario "タスク一覧のテスト" do
@@ -21,15 +21,31 @@ RSpec.feature "タスク管理機能", type: :feature do
     # tasks_pathにvisitする（タスク一覧ページに遷移する）
     visit tasks_path
 
+    task = all('.task_list')
+
+    task_count = task.count
+
     # visitした（到着した）expect(page)に（タスク一覧ページに）「test01testtest」「sample02sample」という文字列が
     # have_contentされているか？（含まれているか？）ということをexpectする（確認・期待する）テストを書いている
     expect(page).to have_content 'test01testtest'
     expect(page).to have_content 'sample02sample'
+    expect(page).to have_content '高'
+    expect(page).to have_content '中'
+    expect(page).to have_content '低'
+
+    expect(task[0]).to have_content '低'
+    expect(task[task_count - 1]).to have_content '高'
+
     # visitした（到着した）expect(page)に（タスク一覧ページに）「testtesttest」「samplesample」という文字列が
     # have_contentされていない（含まれていない）ということをexpectする（確認・期待する）テストを書いている
     expect(page).not_to have_content 'testtesttest'
     expect(page).not_to have_content 'samplesample'
+    expect(page).not_to have_content '松'
+    expect(page).not_to have_content '竹'
+    expect(page).not_to have_content '梅'
 
+    expect(task[0]).not_to have_content '梅'
+    expect(task[task_count - 1]).not_to have_content '松'
   end
 
   scenario "タスク作成のテスト", js: true do
@@ -48,6 +64,8 @@ RSpec.feature "タスク管理機能", type: :feature do
     # 「進捗状況」内容をセット
     select '完了', from: '進捗状況'
 
+    select '高', from: '優先順位'
+
     # 「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
     # 4.「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
     click_on '登録する'
@@ -61,13 +79,14 @@ RSpec.feature "タスク管理機能", type: :feature do
     expect(page).to have_content 'Rspecのテストコードを作成すること'
     expect(page).to have_content '2019-10-08'
     expect(page).to have_content '完了'
+    expect(page).to have_content '高'
     expect(page).not_to have_content '本番用のタスク名です'
 
   end
 
   scenario "タスク詳細のテスト" do
     # 「任意のタスク詳細画面に遷移したら、該当タスクの内容が表示されたページに遷移する」ことをテストで証明しましょう。
-    task = Task.create!(name: 'task_name_06', description: 'test06testtest', deadline: '2019-10-02', status: "着手中")
+    task = Task.create!(name: 'task_name_06', description: 'test06testtest', deadline: '2019-10-02', status: "着手中", priority: 1)
 
     visit task_path(task.id)
 
@@ -75,11 +94,13 @@ RSpec.feature "タスク管理機能", type: :feature do
     expect(page).to have_content 'test06testtest'
     expect(page).to have_content '2019-10-02'
     expect(page).to have_content '着手中'
+    expect(page).to have_content '中'
 
     expect(page).not_to have_content 'task_name_07'
     expect(page).not_to have_content 'test07testtest'
     expect(page).not_to have_content '2019-10-03'
     expect(page).not_to have_content '完了'
+    expect(page).not_to have_content '竹'
   end
 
   scenario "タスクが作成日時の降順に並んでいるかのテスト" do
@@ -241,5 +262,37 @@ RSpec.feature "タスク管理機能", type: :feature do
     expect(tasks[0]).to have_content "最初に作成したタスク詳細first_order_task_description"
     expect(tasks[1]).to have_content "test01testtest"
     # save_and_open_page
+  end
+
+  scenario "優先順位で高い順にソートして表示できるかのテスト" do
+    visit tasks_path
+
+    task = all('.task_list')
+
+    task_0 = task[0]
+
+    expect(task_0).to have_content "低"
+
+    expect(task_0).not_to have_content "高"
+
+    click_link 'order_change_priority'
+
+    task = all('.task_list')
+
+    task_0 = task[0]
+
+    expect(task_0).to have_content "高"
+
+    expect(task_0).not_to have_content "低"
+
+    click_link 'order_change_priority'
+
+    task = all('.task_list')
+
+    task_0 = task[0]
+
+    expect(task_0).to have_content "高"
+
+    expect(task_0).not_to have_content "低"
   end
 end
