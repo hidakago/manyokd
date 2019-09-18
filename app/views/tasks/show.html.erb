@@ -17,7 +17,7 @@
 </p>
 <p>
   <strong><%= t('view.tasks.task_priority') %></strong>
-  <%= @task.priority %>
+  <%= t("enums.task.priority.#{@task.priority}") %>
 </p>
 <%= link_to t('view.tasks.link_to_edit_task'), edit_task_path(@task) %> |
 <%= link_to t('view.tasks.link_to_index_task'), tasks_path %>

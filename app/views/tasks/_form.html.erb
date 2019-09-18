@@ -27,7 +27,8 @@
   </div>
   <div class="field">
     <%= form.label :priority, t('view.tasks.task_priority') %>
-    <%= form.select :priority, Task.priorities.keys.to_a, {} %>
+    <%#= form.select :priority, Task.priorities_i18n.keys.to_a, {} %>
+    <%= form.select :priority, Task.priorities.map { |k, v| [t("enums.task.priority.#{k}"), k] } %>
   </div>
   <div class="actions">
     <%= form.submit %>

@@ -60,7 +60,7 @@
         <td><%= task.description %></td>
         <td><%= task.deadline %></td>
         <td><%= task.status %></td>
-        <td><%= task.priority %></td>
+        <td><%= t("enums.task.priority.#{task.priority}") %></td>
         <td><%= link_to t('view.tasks.link_to_show_task'), task %></td>
         <td><%= link_to t('view.tasks.link_to_edit_task'), edit_task_path(task) %></td>
         <td>
