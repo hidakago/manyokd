@@ -1,6 +1,11 @@
 class UsersController < ApplicationController
   def new
-    @user = User.new
+    # ログインしている時は、ユーザー登録画面に行かせないようにする
+    if logged_in?
+      redirect_to user_path(current_user.id)
+    else
+      @user = User.new
+    end
   end
 
   def create
@@ -14,7 +19,12 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    # 自分（current_user）以外のユーザのマイページ（userのshow画面）に行かせない
+    if current_user.id != params[:id]
+      @user = User.find(current_user.id)
+    else
+      @user = User.find(params[:id])
+    end
   end
 
   private
