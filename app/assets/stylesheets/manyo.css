@@ -44,3 +44,6 @@
 .user_input_aria td {
   width: 12rem;
 }
+.horizontal_setting {
+  display: flex;
+}

@@ -33,3 +33,4 @@ ja:
       user_password_confirmation: 確認用パスワード
     sessions:
       link_to_new_session: ログイン
+      link_to_delete_session: ログアウト
