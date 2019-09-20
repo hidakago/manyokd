@@ -69,3 +69,5 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'enum_help'
 gem 'kaminari', '~> 0.17.0'
+gem 'faker'
+gem 'bcrypt', '3.1.11'

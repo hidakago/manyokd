@@ -10,11 +10,11 @@
 |User    |ユーザー|  
 
 
-|カラム名 |key|データ型|説明        |  
-|--------|---|------|------------|  
-|name    |   |string|ユーザー名    |  
-|email   |   |string|メールアドレス|  
-|password|   |string|パスワード   |  
+|カラム名        |key|データ型|説明        |  
+|---------------|---|------|------------|  
+|name    　　　　|   |string|ユーザー名    |  
+|email   　　　　|   |string|メールアドレス|  
+|password_digest|   |string|パスワード   |  
 
 2. Task  
 
