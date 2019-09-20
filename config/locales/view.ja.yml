@@ -23,3 +23,13 @@ ja:
       conditional_search: 絞り込み検索
       search_execution: 検索実行
       sort_priority_desc: 優先順位の高い順にソートする
+    users:
+      link_to_new_user: ユーザー登録
+      link_to_show_user: ユーザー情報
+      error_notification_word: 件のエラーがあります。
+      user_name: 名前
+      user_email: メールアドレス
+      user_password: パスワード
+      user_password_confirmation: 確認用パスワード
+    sessions:
+      link_to_new_session: ログイン

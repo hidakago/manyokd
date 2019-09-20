@@ -38,3 +38,9 @@
 .task_input_aria td {
   width: 10rem;
 }
+.user_input_aria tr {
+  height: 4rem;
+}
+.user_input_aria td {
+  width: 12rem;
+}

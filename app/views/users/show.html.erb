@@ -1,0 +1,27 @@
+<div>
+  <p id="notice"><%= notice %></p>
+</div>
+<div>
+  <h1 class="bg-primary"><%= t('view.users.link_to_show_user') %></h1>
+</div>
+<br>
+<table class="user_input_aria">
+  <tr>
+    <td>
+      <strong><%= t('view.users.user_name') %></strong>
+    </td>
+    <td>
+      <%= @user.name %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong><%= t('view.users.user_email') %></strong>
+    </td>
+    <td>
+      <%= @user.email %>
+    </td>
+  </tr>
+</table>
+<br>
+<%= link_to t('view.tasks.link_to_index_task'), tasks_path %>
