@@ -1,0 +1,45 @@
+<div>
+  <p id="notice"><%= notice %></p>
+</div>
+<div>
+  <h1 class="bg-warning"><%= t('view.admin.user_index') %></h1>
+</div>
+<div class="horizontal_setting">
+  <div><p><%= current_user.name %></p></div>
+  <div class="space10"><p><%= link_to t('view.sessions.link_to_delete_session'), session_path(current_user.id), method: :delete %></p></div>
+</div>
+<br>
+<div>
+  <table>
+    <tr>
+      <td class="td_link_to_new_task"><%= link_to t('view.users.link_to_new_user'), new_admin_user_path %></td>
+    </tr>
+  </table>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= t('view.users.user_name') %></th>
+      <th><%= t('view.users.user_email') %></th>
+      <th><%= t('view.users.task_count') %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr class="task_list">
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td><%= user.tasks.count %></td>
+        <td><%= link_to t('view.users.show_user_task'), admin_user_path(user) %></td>
+        <td><%= link_to t('view.users.edit_user'), edit_admin_user_path(user) %></td>
+        <td>
+          <%= link_to t('view.users.delete_user'), admin_user_path(user), method: :delete,
+          data: { confirm: t('view.users.message_of_confirm_delete_user') } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

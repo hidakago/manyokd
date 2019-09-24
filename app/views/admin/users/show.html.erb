@@ -1,0 +1,40 @@
+<div>
+  <p id="notice"><%= notice %></p>
+</div>
+<div>
+  <h1 class="bg-warning"><%= t('view.users.show_user_task') %></h1>
+</div>
+<div class="horizontal_setting">
+  <div><p><%= @user.name %></p></div>
+  <div class="space10"><%= link_to t('view.admin.user_index'), admin_users_path %></div>
+</div>
+<br>
+<div>
+  <table>
+  </table>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= t('view.tasks.task_name') %></th>
+      <th><%= t('view.tasks.task_description') %></th>
+      <th><%= t('view.tasks.task_deadline') %></th>
+      <th><%= t('view.tasks.task_status') %></th>
+      <th><%= t('view.tasks.task_priority') %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tasks.each do |task| %>
+      <tr class="task_list">
+        <td><%= task.name %></td>
+        <td><%= task.description %></td>
+        <td><%= task.deadline %></td>
+        <td><%= task.status %></td>
+        <td><%= t("enums.task.priority.#{task.priority}") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
