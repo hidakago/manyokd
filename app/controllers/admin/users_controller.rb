@@ -1,5 +1,6 @@
 class Admin::UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy]
+  before_action :check_user, only: %i[index new show edit]
 
   def index
     # @users = User.all
@@ -56,6 +57,13 @@ class Admin::UsersController < ApplicationController
 
   private
 
+  def check_user
+    if !current_user.present?
+      redirect_to root_path, notice: 'アクセスできません。ログインしてください'
+    elsif !current_user.admin_allowed
+      redirect_to user_path(current_user.id), notice: 'アクセスできません。'
+    end
+  end
   def set_user
     @user = User.find(params[:id])
   end
