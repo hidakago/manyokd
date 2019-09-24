@@ -7,12 +7,15 @@ RSpec.feature "ユーザ登録機能とログイン機能のテスト", type: :f
     FactoryBot.create(:task_usertest)
     FactoryBot.create(:other_user)
     FactoryBot.create(:task_other_usertest)
-  #   FactoryBot.create(:task, name: 'task_name_01', description: 'test01testtest', deadline: '2019-10-05', status: "完了", priority: 1)
-  #   FactoryBot.create(:task, name: 'task_name_02', description: 'sample02sample', deadline: '2019-10-01', status: "未着手", priority: 2)
-  #   FactoryBot.create(:task, name: 'task_name_08', description: 'test08testtest', deadline: '2019-10-07', status: "未着手", priority: 1)
-  #   FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02', status: "着手中", priority: 0)
-  #   FactoryBot.create(:second_task, deadline: '2019-10-02', status: "未着手", priority: 1)
-  #   FactoryBot.create(:last_order_task, deadline: '2019-10-06', status: "着手中", priority: 2)
+    FactoryBot.create(:other_user2)
+    FactoryBot.create(:other_user3)
+
+    FactoryBot.create(:task_other_usertest2, name: 'task_name_01', description: 'test01testtest', deadline: '2019-10-05', status: "完了", priority: 1)
+    FactoryBot.create(:task_other_usertest2, name: 'task_name_02', description: 'sample02sample', deadline: '2019-10-01', status: "未着手", priority: 2)
+
+    FactoryBot.create(:task_other_usertest3, name: 'task_name_08', description: 'test08testtest', deadline: '2019-10-07', status: "未着手", priority: 1)
+    FactoryBot.create(:task_other_usertest3, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02', status: "着手中", priority: 0)
+    FactoryBot.create(:task_other_usertest3, name: 'task_name_10', description: 'sample10sample', deadline: '2019-10-02', status: "着手中", priority: 0)
   end
   scenario "ユーザ登録のテスト" do
 
@@ -100,7 +103,7 @@ RSpec.feature "ユーザ登録機能とログイン機能のテスト", type: :f
     expect(page).to have_content 'メールアドレス'
     expect(page).to have_content 'パスワード'
 
-    save_and_open_page
+    # save_and_open_page
   end
 
   scenario "ログイン画面のテスト" do
@@ -204,5 +207,204 @@ RSpec.feature "ユーザ登録機能とログイン機能のテスト", type: :f
     expect(page).to have_content 'メールアドレス'
     expect(page).to have_content 'パスワード'
     # save_and_open_page
+  end
+  scenario "ユーザ管理画面の表示テスト" do
+    visit new_session_path
+
+    fill_in 'メールアドレス', with: 'sample@mail.com'
+    fill_in 'パスワード', with: 'samplesample'
+
+    click_on 'ログイン'
+
+    #ユーザ管理画面へ
+    visit admin_users_path
+
+    user = all('.task_list')
+
+    user_count = user.count
+
+    expect(user_count).to eq 4
+    expect(user[0]).to have_content 'sample_name'
+    expect(user[1]).to have_content 'other_sample_name'
+    expect(user[2]).to have_content 'other_sample_name2'
+    expect(user[3]).to have_content 'other_sample_name3'
+  end
+  scenario "ユーザ登録画面の表示テスト" do
+    visit new_session_path
+
+    fill_in 'メールアドレス', with: 'sample@mail.com'
+    fill_in 'パスワード', with: 'samplesample'
+
+    click_on 'ログイン'
+
+    #ユーザ管理画面へ
+    visit admin_users_path
+
+    #ユーザ登録画面へ
+    visit new_admin_user_path
+
+    # ユーザ登録画面かどうか確認
+    expect(page).to have_content 'ユーザー登録'
+
+  end
+  scenario "ユーザ登録画面の登録OKテスト" do
+    visit new_session_path
+
+    fill_in 'メールアドレス', with: 'sample@mail.com'
+    fill_in 'パスワード', with: 'samplesample'
+
+    click_on 'ログイン'
+
+    #ユーザ管理画面へ
+    visit admin_users_path
+
+    #ユーザ登録画面へ
+    click_link 'ユーザー登録'
+
+    # ユーザ登録画面かどうか確認
+    expect(page).to have_content 'ユーザー登録'
+
+    fill_in '名前', with: 'test'
+    fill_in 'メールアドレス', with: 'test@mail.com'
+    fill_in 'パスワード', with: 'testtesttest'
+    fill_in '確認用パスワード', with: 'testtesttest'
+
+    click_on '登録する'
+
+    user = all('.task_list')
+
+    user_count = user.count
+
+    expect(user_count).to eq 5
+    expect(user[0]).to have_content 'sample_name'
+    expect(user[1]).to have_content 'other_sample_name'
+    expect(user[2]).to have_content 'other_sample_name2'
+    expect(user[3]).to have_content 'other_sample_name3'
+    expect(user[4]).to have_content 'test@mail.com'
+# save_and_open_page
+  end
+  scenario "ユーザ登録画面の登録エラーテスト" do
+    visit new_session_path
+
+    fill_in 'メールアドレス', with: 'sample@mail.com'
+    fill_in 'パスワード', with: 'samplesample'
+
+    click_on 'ログイン'
+
+    #ユーザ管理画面へ
+    visit admin_users_path
+
+    #ユーザ登録画面へ
+    click_link 'ユーザー登録'
+
+    # ユーザ登録画面かどうか確認
+    expect(page).to have_content 'ユーザー登録'
+
+    fill_in '名前', with: ''
+    fill_in 'メールアドレス', with: 'test@mail.com'
+    fill_in 'パスワード', with: 'testtesttest'
+    fill_in '確認用パスワード', with: 'testtesttest'
+
+    click_on '登録する'
+
+    expect(page).to have_content '名前を入力してください'
+# save_and_open_page
+  end
+  scenario "ユーザ情報更新画面の表示テスト" do
+    visit new_session_path
+
+    fill_in 'メールアドレス', with: 'sample@mail.com'
+    fill_in 'パスワード', with: 'samplesample'
+
+    click_on 'ログイン'
+
+    #ユーザ管理画面へ
+    visit admin_users_path
+
+    #ユーザ更新画面へ
+    visit edit_admin_user_path(100)
+
+    # ユーザ登録画面かどうか確認
+    expect(page).to have_content 'ユーザー情報更新'
+  end
+  scenario "ユーザ情報更新画面の入力OKテスト" do
+    visit new_session_path
+
+    fill_in 'メールアドレス', with: 'sample@mail.com'
+    fill_in 'パスワード', with: 'samplesample'
+
+    click_on 'ログイン'
+
+    #ユーザ管理画面へ
+    visit admin_users_path
+
+    #ユーザ更新画面へ
+    visit edit_admin_user_path(100)
+
+    fill_in '名前', with: 'test'
+    fill_in 'メールアドレス', with: 'test@mail.com'
+    fill_in 'パスワード', with: 'testtesttest'
+    fill_in '確認用パスワード', with: 'testtesttest'
+
+    click_on '更新する'
+
+    user = all('.task_list')
+
+    user_count = user.count
+
+    expect(user_count).to eq 4
+    expect(user[0]).to have_content 'other_sample_name'
+    expect(user[1]).to have_content 'other_sample_name2'
+    expect(user[2]).to have_content 'other_sample_name3'
+    expect(user[3]).to have_content 'test'
+  end
+  scenario "ユーザ情報更新画面の入力NGテスト" do
+    visit new_session_path
+
+    fill_in 'メールアドレス', with: 'sample@mail.com'
+    fill_in 'パスワード', with: 'samplesample'
+
+    click_on 'ログイン'
+
+    #ユーザ管理画面へ
+    visit admin_users_path
+
+    #ユーザ更新画面へ
+    visit edit_admin_user_path(100)
+
+    fill_in '名前', with: ''
+    fill_in 'メールアドレス', with: 'test@mail.com'
+    fill_in 'パスワード', with: 'testtesttest'
+    fill_in '確認用パスワード', with: 'testtesttest'
+
+    click_on '更新する'
+
+    expect(page).to have_content '名前を入力してください'
+  end
+  scenario "ユーザタスク情報画面の表示テスト" do
+    visit new_session_path
+
+    fill_in 'メールアドレス', with: 'sample@mail.com'
+    fill_in 'パスワード', with: 'samplesample'
+
+    click_on 'ログイン'
+
+    #ユーザ管理画面へ
+    visit admin_users_path
+
+    #ユーザ更新画面へ
+    visit admin_user_path(100)
+
+    # ユーザ登録画面かどうか確認
+    expect(page).to have_content 'ユーザータスク情報'
+
+    user = all('.task_list')
+
+    user_count = user.count
+
+    expect(user_count).to eq 1
+    expect(user[0]).to have_content 'Factoryで作ったデフォルトのタイトル１'
+    expect(user[0]).to have_content 'Factoryで作ったデフォルトのコンテント１'
+    expect(user[0]).to have_content '2019-10-02'
   end
 end
