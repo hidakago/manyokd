@@ -31,6 +31,13 @@ ja:
       user_email: メールアドレス
       user_password: パスワード
       user_password_confirmation: 確認用パスワード
+      task_count: 登録タスク数
+      show_user_task: ユーザータスク情報
+      edit_user: ユーザー情報更新
+      delete_user: ユーザー削除
+      message_of_confirm_delete_user: ユーザーを削除してもよろしいですか？
     sessions:
       link_to_new_session: ログイン
       link_to_delete_session: ログアウト
+    admin:
+      user_index: ユーザー管理画面

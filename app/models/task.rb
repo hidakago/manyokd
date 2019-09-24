@@ -7,6 +7,7 @@ class Task < ApplicationRecord
 
   enum priority: { priority_low: 0, priority_medium: 1, priority_high: 2 }
 
+  belongs_to :user
   def not_entered_deadline
     if deadline == "0000-00-00"
       errors.add(:deadline, "に適切な年月日を設定してください")
