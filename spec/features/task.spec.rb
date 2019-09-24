@@ -264,7 +264,7 @@ RSpec.feature "タスク管理機能", type: :feature do
     expect(tasks[1]).to have_content "test01testtest"
     # save_and_open_page
   end
-break
+
   scenario "優先順位で高い順にソートして表示できるかのテスト" do
     visit tasks_path
 
