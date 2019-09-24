@@ -4,6 +4,11 @@
 <div>
   <h1 class="bg-primary"><%= t('view.tasks.index') %></h1>
 </div>
+<div class="horizontal_setting">
+  <div><p><%= current_user.name %></p></div>
+  <div class="space10"><p><%= link_to t('view.users.link_to_show_user'), user_path(current_user.id) %></p></div>
+  <div class="space10"><p><%= link_to t('view.sessions.link_to_delete_session'), session_path(current_user.id), method: :delete %></p></div>
+</div>
 <br>
 <div>
   <table>

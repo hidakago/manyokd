@@ -1,0 +1,33 @@
+<h1 class="bg-primary"><%= t('view.sessions.link_to_new_session') %></h1>
+<br>
+<%= form_with(scope: :session, url: sessions_path, local: true) do |form| %>
+  <% flash.each do |key, value| %>
+    <div class="message-text alert alert-warning" role="alert">
+      <%= content_tag(:div, value, class: "#{key}") if value %>
+    </div>
+  <% end %>
+  <table class="user_input_aria">
+    <tr>
+      <td>
+        <%= form.label :email, t('view.users.user_email') %>
+      </td>
+      <td>
+        <%= form.email_field :email %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= form.label :password, t('view.users.user_password') %>
+      </td>
+      <td>
+        <%= form.password_field :password %>
+      </td>
+    </tr>
+  </table>
+  <br>
+  <div class="actions">
+    <%= form.submit t('view.sessions.link_to_new_session') %>
+  </div>
+  <br>
+<% end %>
+<%= link_to t('view.users.link_to_new_user'), new_user_path %>

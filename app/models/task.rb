@@ -2,7 +2,8 @@ class Task < ApplicationRecord
   validates :name, presence: true
   validate :not_entered_deadline
 
-  scope :search, -> (name_key, status_key) {where('(name LIKE ?) AND (status = ?)', "%#{name_key}%", status_key)}
+  # scope :search, -> (name_key, status_key) {where('(name LIKE ?) AND (status = ?)', "%#{name_key}%", status_key)}
+  scope :search, -> (name_key, status_key, user_id_key) {where('(name LIKE ?) AND (status = ?) AND (user_id = ?)', "%#{name_key}%", status_key, user_id_key)}
 
   enum priority: { priority_low: 0, priority_medium: 1, priority_high: 2 }
 
