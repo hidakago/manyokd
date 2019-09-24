@@ -1,4 +1,11 @@
 FactoryBot.define do
+  factory :login_user, class: User do
+    name { 'sample_name' }
+    email { 'sample@mail.com' }
+    password { 'samplesample' }
+    password_confirmation { 'samplesample' }
+    id { 100 }
+  end
 
   # 作成するテストデータの名前を「task」とします
   # （実際に存在するクラス名と一致するテストデータの名前をつければ、そのクラスのテストデータを自動で作成します）

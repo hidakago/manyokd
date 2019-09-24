@@ -4,20 +4,26 @@ require 'rails_helper'
 # このRSpec.featureの右側に、「タスク管理機能」のように、テスト項目の名称を書きます（do ~ endでグループ化されています）
 RSpec.feature "タスク管理機能", type: :feature do
   background do
-    FactoryBot.create(:first_order_task, deadline: '2019-10-02', status: "完了", priority: 0)
-    FactoryBot.create(:task, name: 'task_name_01', description: 'test01testtest', deadline: '2019-10-05', status: "完了", priority: 1)
-    FactoryBot.create(:task, name: 'task_name_02', description: 'sample02sample', deadline: '2019-10-01', status: "未着手", priority: 2)
-    FactoryBot.create(:task, name: 'task_name_08', description: 'test08testtest', deadline: '2019-10-07', status: "未着手", priority: 1)
-    FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02', status: "着手中", priority: 0)
-    FactoryBot.create(:second_task, deadline: '2019-10-02', status: "未着手", priority: 1)
-    FactoryBot.create(:last_order_task, deadline: '2019-10-06', status: "着手中", priority: 2)
+    FactoryBot.create(:login_user)
+    FactoryBot.create(:first_order_task, deadline: '2019-10-02', status: "完了", priority: 0, user_id: 100)
+    FactoryBot.create(:task, name: 'task_name_01', description: 'test01testtest', deadline: '2019-10-05', status: "完了", priority: 1, user_id: 100)
+    FactoryBot.create(:task, name: 'task_name_02', description: 'sample02sample', deadline: '2019-10-01', status: "未着手", priority: 2, user_id: 100)
+    FactoryBot.create(:task, name: 'task_name_08', description: 'test08testtest', deadline: '2019-10-07', status: "未着手", priority: 1, user_id: 100)
+    FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02', status: "着手中", priority: 0, user_id: 100)
+    FactoryBot.create(:second_task, deadline: '2019-10-02', status: "未着手", priority: 1, user_id: 100)
+    FactoryBot.create(:last_order_task, deadline: '2019-10-06', status: "着手中", priority: 2, user_id: 100)
+
+    #ログイン実行
+    visit new_session_path
+
+    fill_in 'メールアドレス', with: 'sample@mail.com'
+    fill_in 'パスワード', with: 'samplesample'
+
+    click_on 'ログイン'
+
   end
   # scenario（itのalias）の中に、確認したい各項目のテストの処理を書きます。
   scenario "タスク一覧のテスト" do
-    # あらかじめタスク一覧のテストで使用するためのタスクを二つ作成する
-    # Task.create!(name: 'task_name_01', description: 'test01testtest')
-    # Task.create!(name: 'test_name_02', description: 'sample02sample')
-
     # tasks_pathにvisitする（タスク一覧ページに遷移する）
     visit tasks_path
 
@@ -80,7 +86,6 @@ RSpec.feature "タスク管理機能", type: :feature do
     expect(page).not_to have_content '2019-10-08'
     expect(page).to have_content 'task_name_08'
     expect(page).to have_content 'test08testtest'
-
   end
 
   scenario "タスク詳細のテスト" do
@@ -259,7 +264,7 @@ RSpec.feature "タスク管理機能", type: :feature do
     expect(tasks[1]).to have_content "test01testtest"
     # save_and_open_page
   end
-
+break
   scenario "優先順位で高い順にソートして表示できるかのテスト" do
     visit tasks_path
 
