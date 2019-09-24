@@ -44,6 +44,14 @@
         <%= form.password_field :password_confirmation %>
       </td>
     </tr>
+    <tr>
+      <td>
+        <%= form.label :admin_allowed, t('view.users.user_admin_allowed') %>
+      </td>
+      <td>
+        <%= form.check_box :admin_allowed %>
+      </td>
+    </tr>
   </table>
   <br>
   <div class="actions">
