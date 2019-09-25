@@ -22,6 +22,7 @@
       <th><%= t('view.users.user_name') %></th>
       <th><%= t('view.users.user_email') %></th>
       <th><%= t('view.users.task_count') %></th>
+      <th><%= t('view.users.user_admin_allowed') %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -31,6 +32,13 @@
         <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td><%= user.tasks.count %></td>
+        <td>
+          <% if user.admin_allowed %>
+            <%= t('view.admin.user_admin_allowed_true') %>
+          <% else %>
+            <%= t('view.admin.user_admin_allowed_false') %>
+          <% end %>
+        </td>
         <td><%= link_to t('view.users.show_user_task'), admin_user_path(user) %></td>
         <td><%= link_to t('view.users.edit_user'), edit_admin_user_path(user) %></td>
         <td>

@@ -1,5 +1,6 @@
 class Admin::UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy]
+  before_action :check_user, only: %i[index new show edit]
 
   def index
     # @users = User.all
@@ -37,30 +38,45 @@ class Admin::UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
-      redirect_to admin_users_path, notice: "ユーザー情報を更新しました！"
+    user_id = @user.id
+    if (current_user.id == user_id) && !(params[:admin_allowed] == true)
+      redirect_to edit_admin_user_path(user_id), notice: "自分の管理者権限は外すことができません。"
     else
-      render "admin/users/edit"
+      unless @user.update(user_params)
+        redirect_to edit_admin_user_path(user_id), notice: "管理者が1人のみであるため、管理者権限を外すことができません。"
+      else
+        redirect_to admin_users_path, notice: "ユーザー情報を更新しました！"
+      end
     end
   end
 
   def destroy
-    @tasks = Task.where(user_id: @user.id)
-    @tasks.each do |n|
-      n.destroy
+    user_id = @user.id
+    if current_user.id == user_id
+      redirect_to admin_users_path, notice: '自分のユーザー情報を削除することはできません。'
+    else
+      unless @user.destroy
+        redirect_to admin_users_path, notice: '管理者が1人のみであるため、削除することができません。'
+      else
+        redirect_to admin_users_path, notice: 'ユーザーが削除されました'
+      end
     end
-
-    @user.destroy
-    redirect_to admin_users_path, notice: 'ユーザーが削除されました'
   end
 
   private
 
+  def check_user
+    if !current_user.present?
+      redirect_to root_path, notice: 'アクセスできません。ログインしてください'
+    elsif !current_user.admin_allowed
+      redirect_to user_path(current_user.id), notice: 'アクセスできません。'
+    end
+  end
   def set_user
     @user = User.find(params[:id])
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :admin_allowed)
   end
 end
