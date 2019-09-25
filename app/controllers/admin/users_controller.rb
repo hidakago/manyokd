@@ -38,10 +38,11 @@ class Admin::UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
-      redirect_to admin_users_path, notice: "ユーザー情報を更新しました！"
+    user_id = @user.id
+    unless @user.update(user_params)
+      redirect_to edit_admin_user_path(user_id), notice: "管理者が1人のみであるため、管理者権限を外すことができません。"
     else
-      render "admin/users/edit"
+      redirect_to admin_users_path, notice: "ユーザー情報を更新しました！"
     end
   end
 
