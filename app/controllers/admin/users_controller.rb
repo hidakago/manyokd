@@ -39,21 +39,28 @@ class Admin::UsersController < ApplicationController
 
   def update
     user_id = @user.id
-    unless @user.update(user_params)
-      redirect_to edit_admin_user_path(user_id), notice: "管理者が1人のみであるため、管理者権限を外すことができません。"
+    if (current_user.id == user_id) && !(params[:admin_allowed] == true)
+      redirect_to edit_admin_user_path(user_id), notice: "自分の管理者権限は外すことができません。"
     else
-      redirect_to admin_users_path, notice: "ユーザー情報を更新しました！"
+      unless @user.update(user_params)
+        redirect_to edit_admin_user_path(user_id), notice: "管理者が1人のみであるため、管理者権限を外すことができません。"
+      else
+        redirect_to admin_users_path, notice: "ユーザー情報を更新しました！"
+      end
     end
   end
 
   def destroy
-    @tasks = Task.where(user_id: @user.id)
-    @tasks.each do |n|
-      n.destroy
+    user_id = @user.id
+    if current_user.id == user_id
+      redirect_to admin_users_path, notice: '自分のユーザー情報を削除することはできません。'
+    else
+      unless @user.destroy
+        redirect_to admin_users_path, notice: '管理者が1人のみであるため、削除することができません。'
+      else
+        redirect_to admin_users_path, notice: 'ユーザーが削除されました'
+      end
     end
-
-    @user.destroy
-    redirect_to admin_users_path, notice: 'ユーザーが削除されました'
   end
 
   private
