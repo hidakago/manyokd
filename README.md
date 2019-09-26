@@ -15,7 +15,7 @@
 |name    　　　　|   |string|ユーザー名    |  
 |email   　　　　|   |string|メールアドレス|  
 |password_digest|   |string|パスワード   |  
-
+|admin_allowed  |   |boolean|管理者権限の有無|
 2. Task  
 
 |モデル名 |日本語名|  
