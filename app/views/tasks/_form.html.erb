@@ -60,11 +60,11 @@
     <span class="space10">
       <% if task.label_ids.include?(label.id) %>
         <%= form.check_box :label_ids,
-          { multiple: true, checked: true, disabled: label[:disabled], include_hidden: false }, label[:id] %>
+          { id: "task_label_ids_#{label.id}", multiple: true, checked: true, disabled: label[:disabled], include_hidden: false }, label[:id] %>
         <label><%= label.name %></label>
       <% else %>
-        <%= form.check_box :label_ids,
-          { multiple: true, checked: label[:checked], disabled: label[:disabled], include_hidden: false }, label[:id] %>
+        <%= form.check_box :label_ids, 
+          { id: "task_label_ids_#{label.id}", multiple: true, checked: label[:checked], disabled: label[:disabled], include_hidden: false }, label[:id] %>
         <label><%= label.name %></label>
       <% end %>
     </span>

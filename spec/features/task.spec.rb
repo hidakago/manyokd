@@ -12,6 +12,9 @@ RSpec.feature "タスク管理機能", type: :feature do
     FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02', status: "着手中", priority: 0, user_id: 100)
     FactoryBot.create(:second_task, deadline: '2019-10-02', status: "未着手", priority: 1, user_id: 100)
     FactoryBot.create(:last_order_task, deadline: '2019-10-06', status: "着手中", priority: 2, user_id: 100)
+    FactoryBot.create(:testlabel, name: 'label_name01')
+    FactoryBot.create(:testlabel, name: 'label_name02')
+    FactoryBot.create(:testlabel, name: 'label_name03')
 
     #ログイン実行
     visit new_session_path
@@ -72,6 +75,8 @@ RSpec.feature "タスク管理機能", type: :feature do
 
     select '高', from: '優先順位'
 
+    check('task_label_ids_4')
+
     # 「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
     # 4.「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
     click_on '登録する'
@@ -90,7 +95,7 @@ RSpec.feature "タスク管理機能", type: :feature do
 
   scenario "タスク詳細のテスト" do
     # 「任意のタスク詳細画面に遷移したら、該当タスクの内容が表示されたページに遷移する」ことをテストで証明しましょう。
-    task = Task.create!(name: 'task_name_06', description: 'test06testtest', deadline: '2019-10-02', status: "着手中", priority: 1)
+    task = Task.create!(name: 'task_name_06', description: 'test06testtest', deadline: '2019-10-02', status: "着手中", priority: 1, user_id: 100)
 
     visit task_path(task.id)
 
@@ -296,4 +301,126 @@ RSpec.feature "タスク管理機能", type: :feature do
 
     expect(task_0).not_to have_content "低"
   end
+  # scenario "タスク作成優先順位で高い順にソートして表示できるかのテスト" do
+  # end
+
+end
+RSpec.feature "ラベル関連機能", type: :feature do
+  background do
+    FactoryBot.create(:login_user)
+    # FactoryBot.create(:first_order_task, deadline: '2019-10-02', status: "完了", priority: 0, user_id: 100)
+    # FactoryBot.create(:task, name: 'task_name_01', description: 'test01testtest', deadline: '2019-10-05', status: "完了", priority: 1, user_id: 100)
+    # FactoryBot.create(:task, name: 'task_name_02', description: 'sample02sample', deadline: '2019-10-01', status: "未着手", priority: 2, user_id: 100)
+    # FactoryBot.create(:task, name: 'task_name_08', description: 'test08testtest', deadline: '2019-10-07', status: "未着手", priority: 1, user_id: 100)
+    # FactoryBot.create(:task, name: 'task_name_09', description: 'sample09sample', deadline: '2019-10-02', status: "着手中", priority: 0, user_id: 100)
+    # FactoryBot.create(:second_task, deadline: '2019-10-02', status: "未着手", priority: 1, user_id: 100)
+    # FactoryBot.create(:last_order_task, deadline: '2019-10-06', status: "着手中", priority: 2, user_id: 100)
+
+    FactoryBot.create(:testlabel, name: 'label_name01')
+    FactoryBot.create(:testlabel, name: 'label_name02')
+    FactoryBot.create(:testlabel, name: 'label_name03')
+
+    #ログイン実行
+    visit new_session_path
+
+    fill_in 'メールアドレス', with: 'sample@mail.com'
+    fill_in 'パスワード', with: 'samplesample'
+
+    click_on 'ログイン'
+
+  end
+
+  scenario "タスク作成・タスク編集のテスト", js: true do
+    # new_task_pathにvisitする（タスク登録ページに遷移する）
+    # 1.ここにnew_task_pathにvisitする処理を書く
+    visit new_task_path
+
+    # 「タスク名」というラベル名の入力欄と、「タスク詳細」というラベル名の入力欄に
+    # タスクのタイトルと内容をそれぞれfill_in（入力）する
+    # 2.ここに「タスク名」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
+    # 3.ここに「タスク詳細」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
+    fill_in 'タスク名', with: 'テスト用のタスク名です'
+    fill_in 'タスク説明', with: 'Rspecのテストコードを作成すること'
+    # 「終了期限」内容をセット
+    page.execute_script("$('#datepicker').val('2019-10-08')")
+    # 「進捗状況」内容をセット
+    select '完了', from: '進捗状況'
+
+    select '高', from: '優先順位'
+
+    check('task_label_ids_1')
+
+    # 「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
+    # 4.「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
+    click_on '登録する'
+
+    # clickで登録されたはずの情報が、タスク詳細ページに表示されているかを確認する
+    # （タスクが登録されたらタスク詳細画面に遷移されるという前提）
+    # 5.タスク詳細ページに、テストコードで作成したはずのデータ（記述）がhave_contentされているか（含まれているか）を確認（期待）するコードを書く
+    visit tasks_path
+
+    expect(page).to have_content 'テスト用のタスク名です'
+    expect(page).to have_content 'Rspecのテストコードを作成すること'
+    expect(page).to have_content '2019-10-08'
+
+    # タスク編集画面へのリンクをクリック
+    click_link 'タスク編集'
+
+    # 表示内容の確認
+    expect(page).to have_content 'label_name01'
+    expect(page).to have_content 'label_name02'
+    expect(page).to have_content 'label_name03'
+    expect(page).not_to have_content 'label_name04'
+    # 存在するラベルのチェックボックスが表示されているか
+    expect(page).to have_field('task_label_ids_1')
+    expect(page).to have_field('task_label_ids_2')
+    expect(page).to have_field('task_label_ids_3')
+    expect(page).not_to have_field('task_label_ids_4')
+    # チェックの状態を確認
+    expect(page).to have_checked_field('task_label_ids_1')
+    expect(page).to have_unchecked_field('task_label_ids_2')
+    expect(page).to have_unchecked_field('task_label_ids_3')
+    # チェック内容を変えてみる
+    uncheck('task_label_ids_1')
+    check('task_label_ids_2')
+    # チェックの状態を確認
+    expect(page).to have_unchecked_field('task_label_ids_1')
+    expect(page).to have_checked_field('task_label_ids_2')
+    expect(page).to have_unchecked_field('task_label_ids_3')
+
+    click_on '更新する'
+
+    # ここでタスク一覧画面に遷移しているはず
+    expect(page).to have_content 'テスト用のタスク名です'
+    expect(page).to have_content 'Rspecのテストコードを作成すること'
+    expect(page).to have_content '2019-10-08'
+
+    # タスク編集画面へのリンクをクリック
+    click_link 'タスク編集'
+
+    # 表示内容の確認
+    expect(page).to have_content 'label_name01'
+    expect(page).to have_content 'label_name02'
+    expect(page).to have_content 'label_name03'
+    expect(page).not_to have_content 'label_name04'
+    # 存在するラベルのチェックボックスが表示されているか
+    expect(page).to have_field('task_label_ids_1')
+    expect(page).to have_field('task_label_ids_2')
+    expect(page).to have_field('task_label_ids_3')
+    expect(page).not_to have_field('task_label_ids_4')
+    # チェックの状態を確認
+    expect(page).to have_unchecked_field('task_label_ids_1')
+    expect(page).to have_checked_field('task_label_ids_2')
+    expect(page).to have_unchecked_field('task_label_ids_3')
+
+
+
+
+
+
+
+
+    save_and_open_page
+  end
+
 end
