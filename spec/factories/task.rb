@@ -30,4 +30,9 @@ FactoryBot.define do
     name { '最後に作成したタスク名last_order_task_name' }
     description { '最後に作成したタスク詳細last_order_task_description' }
   end
+
+  factory :testlabel, class: Label do
+    name { 'テスト用ラベル名' }
+  end
+
 end

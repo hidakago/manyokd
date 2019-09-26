@@ -10,10 +10,10 @@
   <div class="space10"><p><%= link_to t('view.sessions.link_to_delete_session'), session_path(current_user.id), method: :delete %></p></div>
 </div>
 <br>
-<div>
+<div class="td_link_to_new_task"><%= link_to t('view.tasks.link_to_new_task'), new_task_path %></div>
+<div style="display: flex;">
   <table>
     <tr>
-      <td class="td_link_to_new_task"><%= link_to t('view.tasks.link_to_new_task'), new_task_path %></td>
       <td class="td_link_to_order_change">
         <% if @order == "asc" %>
         <%   order_text = t('view.tasks.order_desc') %>
@@ -27,29 +27,53 @@
       <td class="td_link_to_order_change_priority">
         <%= link_to t('view.tasks.sort_priority_desc'), tasks_path(sort_priority: "true"), id: "order_change_priority" %>
       </td>
-      <%= form_with(model: Task.new, local: true, method: :get, url: tasks_path) do |form| %>
-        <td class="td_conditional_search_title">
-          <%= t('view.tasks.conditional_search') %>
-        </td>
-        <td class="td_task_name_title">
-          <%= form.label :name, t('view.tasks.task_name') %>
-        </td>
-        <td class="td_task_name_area">
-          <%= form.text_field :name, id: "search_task_name" %>
-        </td>
-        <td class="td_task_status_title">
-          <%= form.label :status, t('view.tasks.task_status') %>
-        </td>
-        <td class="td_task_status_area">
-          <%= form.select :status,   [t('view.tasks.task_status_not_yet_started'),t('view.tasks.task_status_started'),t('view.tasks.task_status_complete')], id: "search_task_status" %>
-        </td>
-        <td>
-          <%= form.hidden_field :search, value: 'true' %>
-          <%= form.submit t('view.tasks.search_execution'), id: "search_task" %>
-        </td>
-      <% end %>
     </tr>
   </table>
+  <%= form_with(model: Task.new, local: true, method: :get, url: tasks_path) do |form| %>
+  <table>
+    <tr>
+      <td class="td_conditional_search_title">
+        <%= t('view.tasks.conditional_search') %>
+      </td>
+      <td class="td_task_name_title">
+        <%= form.label :name, t('view.tasks.task_name') %>
+      </td>
+      <td class="td_task_name_area">
+        <%= form.text_field :name, id: "search_task_name" %>
+      </td>
+      <td class="td_task_status_title">
+        <%= form.label :status, t('view.tasks.task_status') %>
+      </td>
+      <td class="td_task_status_area">
+        <%= form.select :status,   [t('view.tasks.task_status_not_yet_started'),t('view.tasks.task_status_started'),t('view.tasks.task_status_complete')], id: "search_task_status" %>
+      </td>
+      <td class="td_task_search_button">
+        <%= form.hidden_field :search, value: 'true' %>
+        <%= form.submit t('view.tasks.search_execution'), id: "search_task" %>
+      </td>
+    </tr>
+  </table>
+  <% end %>
+  <%= form_with(model: Task.new, local: true, method: :get, url: tasks_path) do |form| %>
+  <table>
+    <tr>
+      <td class="td_label_search_title">
+        <%= t('view.tasks.label_search') %>
+      </td>
+      <td class="td_label_name_select">
+        <%= form.select (:label_id) do %>
+          <% Label.all.each do |label| %>
+          <%= content_tag(:option, label.name, value: label.id ) %>
+          <% end %>
+        <% end %>
+      </td>
+      <td class="td_label_search_button">
+        <%= form.hidden_field :label_search, value: 'true' %>
+        <%= form.submit t('view.tasks.label_search_execution'), id: "search_label" %>
+      </td>
+    </tr>
+  </table>
+  <% end %>
 </div>
 <table class="table table-striped">
   <thead>
