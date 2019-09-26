@@ -32,39 +32,45 @@
   <%= form_with(model: Task.new, local: true, method: :get, url: tasks_path) do |form| %>
   <table>
     <tr>
-        <td class="td_conditional_search_title">
-          <%= t('view.tasks.conditional_search') %>
-        </td>
-        <td class="td_task_name_title">
-          <%= form.label :name, t('view.tasks.task_name') %>
-        </td>
-        <td class="td_task_name_area">
-          <%= form.text_field :name, id: "search_task_name" %>
-        </td>
-        <td class="td_task_status_title">
-          <%= form.label :status, t('view.tasks.task_status') %>
-        </td>
-        <td class="td_task_status_area">
-          <%= form.select :status,   [t('view.tasks.task_status_not_yet_started'),t('view.tasks.task_status_started'),t('view.tasks.task_status_complete')], id: "search_task_status" %>
-        </td>
-        <td class="td_task_search_button">
-          <%= form.hidden_field :search, value: 'true' %>
-          <%= form.submit t('view.tasks.search_execution'), id: "search_task" %>
-        </td>
-        <td class="td_label_search_title">
-          <%= t('view.tasks.label_search') %>
-        </td>
-        <td class="td_label_name_select">
-          <%= form.select (:label_id) do %>
-            <% Label.all.each do |label| %>
-            <%= content_tag(:option, label.name, value: label.id ) %>
-            <% end %>
+      <td class="td_conditional_search_title">
+        <%= t('view.tasks.conditional_search') %>
+      </td>
+      <td class="td_task_name_title">
+        <%= form.label :name, t('view.tasks.task_name') %>
+      </td>
+      <td class="td_task_name_area">
+        <%= form.text_field :name, id: "search_task_name" %>
+      </td>
+      <td class="td_task_status_title">
+        <%= form.label :status, t('view.tasks.task_status') %>
+      </td>
+      <td class="td_task_status_area">
+        <%= form.select :status,   [t('view.tasks.task_status_not_yet_started'),t('view.tasks.task_status_started'),t('view.tasks.task_status_complete')], id: "search_task_status" %>
+      </td>
+      <td class="td_task_search_button">
+        <%= form.hidden_field :search, value: 'true' %>
+        <%= form.submit t('view.tasks.search_execution'), id: "search_task" %>
+      </td>
+    </tr>
+  </table>
+  <% end %>
+  <%= form_with(model: Task.new, local: true, method: :get, url: tasks_path) do |form| %>
+  <table>
+    <tr>
+      <td class="td_label_search_title">
+        <%= t('view.tasks.label_search') %>
+      </td>
+      <td class="td_label_name_select">
+        <%= form.select (:label_id) do %>
+          <% Label.all.each do |label| %>
+          <%= content_tag(:option, label.name, value: label.id ) %>
           <% end %>
-        </td>
-        <td class="td_label_search_button">
-          <%= form.hidden_field :label_search, value: 'true' %>
-          <%= form.submit t('view.tasks.label_search_execution'), id: "search_label" %>
-        </td>
+        <% end %>
+      </td>
+      <td class="td_label_search_button">
+        <%= form.hidden_field :label_search, value: 'true' %>
+        <%= form.submit t('view.tasks.label_search_execution'), id: "search_label" %>
+      </td>
     </tr>
   </table>
   <% end %>

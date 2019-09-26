@@ -430,5 +430,87 @@ RSpec.feature "ラベル関連機能", type: :feature do
     expect(page).to have_unchecked_field('task_label_ids_3')
 # save_and_open_page
   end
+  scenario "タスク一覧のラベル名検索のテスト", js: true do
+    visit new_task_path
 
+    fill_in 'タスク名', with: 'テスト用のタスク名1'
+    fill_in 'タスク説明', with: 'Rspecのテストコードを作成すること1'
+    # 「終了期限」内容をセット
+    page.execute_script("$('#datepicker').val('2019-10-08')")
+    # 「進捗状況」内容をセット
+    select '完了', from: '進捗状況'
+
+    select '高', from: '優先順位'
+
+    check('task_label_ids_4')
+
+    click_on '登録する'
+
+    expect(page).to have_content 'テスト用のタスク名1'
+    expect(page).to have_content 'Rspecのテストコードを作成すること1'
+    expect(page).not_to have_content 'テスト用のタスク名2'
+    expect(page).not_to have_content 'Rspecのテストコードを作成すること2'
+    expect(page).not_to have_content 'テスト用のタスク名3'
+    expect(page).not_to have_content 'Rspecのテストコードを作成すること3'
+
+    visit new_task_path
+
+    fill_in 'タスク名', with: 'テスト用のタスク名2'
+    fill_in 'タスク説明', with: 'Rspecのテストコードを作成すること2'
+    # 「終了期限」内容をセット
+    page.execute_script("$('#datepicker').val('2019-10-08')")
+    # 「進捗状況」内容をセット
+    select '完了', from: '進捗状況'
+
+    select '高', from: '優先順位'
+
+    check('task_label_ids_4')
+    check('task_label_ids_5')
+
+    click_on '登録する'
+
+    expect(page).to have_content 'テスト用のタスク名1'
+    expect(page).to have_content 'Rspecのテストコードを作成すること1'
+    expect(page).to have_content 'テスト用のタスク名2'
+    expect(page).to have_content 'Rspecのテストコードを作成すること2'
+    expect(page).not_to have_content 'テスト用のタスク名3'
+    expect(page).not_to have_content 'Rspecのテストコードを作成すること3'
+
+    visit new_task_path
+
+    fill_in 'タスク名', with: 'テスト用のタスク名3'
+    fill_in 'タスク説明', with: 'Rspecのテストコードを作成すること3'
+    # 「終了期限」内容をセット
+    page.execute_script("$('#datepicker').val('2019-10-08')")
+    # 「進捗状況」内容をセット
+    select '完了', from: '進捗状況'
+
+    select '高', from: '優先順位'
+
+    check('task_label_ids_4')
+    check('task_label_ids_5')
+    check('task_label_ids_6')
+
+    click_on '登録する'
+
+    expect(page).to have_content 'テスト用のタスク名1'
+    expect(page).to have_content 'Rspecのテストコードを作成すること1'
+    expect(page).to have_content 'テスト用のタスク名2'
+    expect(page).to have_content 'Rspecのテストコードを作成すること2'
+    expect(page).to have_content 'テスト用のタスク名3'
+    expect(page).to have_content 'Rspecのテストコードを作成すること3'
+
+    # 検索用のラベル名を指定
+    select 'label_name02', from: 'task_label_id'
+
+    click_on 'search_label'
+
+    tasks = all('.task_list')
+
+    task_count = tasks.count
+    expect(task_count).to eq 2
+
+    expect(tasks[0]).to have_content "テスト用のタスク名2"
+    expect(tasks[1]).to have_content "テスト用のタスク名3"
+  end
 end
