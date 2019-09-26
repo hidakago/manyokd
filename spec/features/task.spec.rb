@@ -330,7 +330,7 @@ RSpec.feature "ラベル関連機能", type: :feature do
 
   end
 
-  scenario "タスク作成・タスク編集のテスト", js: true do
+  scenario "タスク作成・タスク編集・タスク詳細のテスト", js: true do
     # new_task_pathにvisitする（タスク登録ページに遷移する）
     # 1.ここにnew_task_pathにvisitする処理を書く
     visit new_task_path
@@ -357,11 +357,19 @@ RSpec.feature "ラベル関連機能", type: :feature do
     # clickで登録されたはずの情報が、タスク詳細ページに表示されているかを確認する
     # （タスクが登録されたらタスク詳細画面に遷移されるという前提）
     # 5.タスク詳細ページに、テストコードで作成したはずのデータ（記述）がhave_contentされているか（含まれているか）を確認（期待）するコードを書く
-    visit tasks_path
+    # visit tasks_path
 
     expect(page).to have_content 'テスト用のタスク名です'
     expect(page).to have_content 'Rspecのテストコードを作成すること'
     expect(page).to have_content '2019-10-08'
+
+    # タスク詳細画面へのリンクをクリック
+    click_link 'タスク詳細'
+
+    # 先ほどタスク作成時にチェックしたラベルが表示されているか、チェックしていないラベルが表示されていないか
+    expect(page).to have_content 'label_name01'
+    expect(page).not_to have_content 'label_name02'
+    expect(page).not_to have_content 'label_name03'
 
     # タスク編集画面へのリンクをクリック
     click_link 'タスク編集'
@@ -395,6 +403,14 @@ RSpec.feature "ラベル関連機能", type: :feature do
     expect(page).to have_content 'Rspecのテストコードを作成すること'
     expect(page).to have_content '2019-10-08'
 
+    # タスク詳細画面へのリンクをクリック
+    click_link 'タスク詳細'
+
+    # 先ほどタスク更新時にチェックしたラベルが表示されているか、チェックしていないラベルが表示されていないか
+    expect(page).to have_content 'label_name02'
+    expect(page).not_to have_content 'label_name01'
+    expect(page).not_to have_content 'label_name03'
+
     # タスク編集画面へのリンクをクリック
     click_link 'タスク編集'
 
@@ -408,19 +424,11 @@ RSpec.feature "ラベル関連機能", type: :feature do
     expect(page).to have_field('task_label_ids_2')
     expect(page).to have_field('task_label_ids_3')
     expect(page).not_to have_field('task_label_ids_4')
-    # チェックの状態を確認
+    # チェックの状態を再度確認
     expect(page).to have_unchecked_field('task_label_ids_1')
     expect(page).to have_checked_field('task_label_ids_2')
     expect(page).to have_unchecked_field('task_label_ids_3')
-
-
-
-
-
-
-
-
-    save_and_open_page
+# save_and_open_page
   end
 
 end
