@@ -3,6 +3,7 @@
 }
 .td_link_to_new_task {
   width: 14rem;
+  height: 6rem;
 }
 .td_link_to_order_change {
   width: 12rem;
@@ -11,7 +12,7 @@
   width: 16rem;
 }
 .td_link_to_order_change_priority {
-  width: 30rem;
+  width: 22rem;
 }
 .td_conditional_search_title {
   color: #228b22;
@@ -30,6 +31,20 @@
   width: 6rem;
 }
 .td_task_status_area {
+  width: 8rem;
+}
+.td_task_search_button {
+  width: 10rem;
+}
+.td_label_search_title {
+  color: orange;
+  width: 10rem;
+  font-weight: bold;
+}
+.td_label_name_select {
+  width: 16rem;
+}
+.td_label_search_button {
   width: 10rem;
 }
 .task_input_aria tr {

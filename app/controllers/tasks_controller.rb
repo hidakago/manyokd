@@ -3,9 +3,12 @@ class TasksController < ApplicationController
   def index
     # ログインしていないのにタスクのページに飛ぼうとした場合は、ログインページに遷移させる
     if logged_in?
-      @tasks = Task.where(user_id: current_user.id)
       paginates_per = 4
-      if params[:task].present? && params[:task][:search] == "true"
+      @tasks = Task.where(user_id: current_user.id)
+      if params[:task].present? && params[:task][:label_search] == "true"
+        label = Label.find(params[:task][:label_id])
+        @tasks = label.tasks.page(params[:page]).per(paginates_per)
+      elsif params[:task].present? && params[:task][:search] == "true"
         # @tasks = Task.where("name LIKE ? AND status = ?", "%#{ params[:task][:name] }%", params[:task][:status])
         @tasks = Task.search(params[:task][:name], params[:task][:status], current_user.id).page(params[:page]).per(paginates_per)
       else

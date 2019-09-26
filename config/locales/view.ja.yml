@@ -24,6 +24,8 @@ ja:
       search_execution: 検索実行
       sort_priority_desc: 優先順位の高い順にソートする
       label_index: ラベル一覧
+      label_search: ラベル名検索
+      label_search_execution: ラベル名検索実行
     users:
       link_to_new_user: ユーザー登録
       link_to_show_user: ユーザー情報
