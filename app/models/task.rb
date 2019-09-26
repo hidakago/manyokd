@@ -9,7 +9,7 @@ class Task < ApplicationRecord
 
   belongs_to :user
   has_many :labelings, dependent: :destroy, inverse_of: :task
-  has_many :labeling_labels, through: :labeling, source: :label
+  has_many :labels, through: :labelings
   accepts_nested_attributes_for :labelings, allow_destroy: true
 
   def not_entered_deadline
