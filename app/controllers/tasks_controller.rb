@@ -4,33 +4,36 @@ class TasksController < ApplicationController
     # ログインしていないのにタスクのページに飛ぼうとした場合は、ログインページに遷移させる
     if logged_in?
       paginates_per = 4
-      @tasks = Task.where(user_id: current_user.id)
       if params[:task].present? && params[:task][:label_search] == "true"
         label = Label.find(params[:task][:label_id])
-        @tasks = label.tasks.page(params[:page]).per(paginates_per)
-      elsif params[:task].present? && params[:task][:search] == "true"
-        # @tasks = Task.where("name LIKE ? AND status = ?", "%#{ params[:task][:name] }%", params[:task][:status])
-        @tasks = Task.search(params[:task][:name], params[:task][:status], current_user.id).page(params[:page]).per(paginates_per)
+        @tasks = label.tasks.where(user_id: current_user.id).page(params[:page]).per(paginates_per)
       else
-        if params[:sort_priority]
-          @order = "asc"
-          @order = params[:order] if params[:order]
-          # @tasks = Task.all.order(priority: "desc", created_at: @order).page(params[:page]).per(paginates_per)
-          @tasks = @tasks.all.order(priority: "desc", created_at: @order).page(params[:page]).per(paginates_per)
-        elsif params[:sort_expired]
-          @order = "asc"
-          @order = params[:order] if params[:order]
-          # @tasks = Task.all.order(deadline: "desc", created_at: @order).page(params[:page]).per(paginates_per)
-          @tasks = @tasks.all.order(deadline: "desc", created_at: @order).page(params[:page]).per(paginates_per)
+        @tasks = Task.where(user_id: current_user.id)
+
+        if params[:task].present? && params[:task][:search] == "true"
+          # @tasks = Task.where("name LIKE ? AND status = ?", "%#{ params[:task][:name] }%", params[:task][:status])
+          @tasks = Task.search(params[:task][:name], params[:task][:status], current_user.id).page(params[:page]).per(paginates_per)
         else
-          if params[:order] == "asc"
-            @order = "desc"
-          else
+          if params[:sort_priority]
             @order = "asc"
+            @order = params[:order] if params[:order]
+            # @tasks = Task.all.order(priority: "desc", created_at: @order).page(params[:page]).per(paginates_per)
+            @tasks = @tasks.all.order(priority: "desc", created_at: @order).page(params[:page]).per(paginates_per)
+          elsif params[:sort_expired]
+            @order = "asc"
+            @order = params[:order] if params[:order]
+            # @tasks = Task.all.order(deadline: "desc", created_at: @order).page(params[:page]).per(paginates_per)
+            @tasks = @tasks.all.order(deadline: "desc", created_at: @order).page(params[:page]).per(paginates_per)
+          else
+            if params[:order] == "asc"
+              @order = "desc"
+            else
+              @order = "asc"
+            end
+            # @tasks = Task.all.order(created_at: @order)
+            # @tasks = Task.page(params[:page]).per(paginates_per).order(created_at: @order)
+            @tasks = @tasks.page(params[:page]).per(paginates_per).order(created_at: @order)
           end
-          # @tasks = Task.all.order(created_at: @order)
-          # @tasks = Task.page(params[:page]).per(paginates_per).order(created_at: @order)
-          @tasks = @tasks.page(params[:page]).per(paginates_per).order(created_at: @order)
         end
       end
     else
